@@ -11,7 +11,7 @@ public class GMovies implements Parcelable {
     private String description;
     private String director;
     private String producer;
-    private int release_date;
+    private String release_date;
     private int rt_score;
     private List<String> people;
     private List<String> species;
@@ -25,7 +25,7 @@ public class GMovies implements Parcelable {
         description = in.readString();
         director = in.readString();
         producer = in.readString();
-        release_date = in.readInt();
+        release_date = in.readString();
         rt_score = in.readInt();
         people = in.createStringArrayList();
         species = in.createStringArrayList();
@@ -62,7 +62,7 @@ public class GMovies implements Parcelable {
         return producer;
     }
 
-    public int getRelease_date() {
+    public String getRelease_date() {
         return release_date;
     }
 
@@ -101,7 +101,7 @@ public class GMovies implements Parcelable {
         dest.writeString(description);
         dest.writeString(director);
         dest.writeString(producer);
-        dest.writeInt(release_date);
+        dest.writeString(release_date);
         dest.writeInt(rt_score);
         dest.writeStringList(people);
         dest.writeStringList(species);

@@ -91,7 +91,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
         final GMovies currentGMovie = values.get(position);
         holder.txtHeader.setText(currentGMovie.getTitle());
-        holder.txtFooter.setText(currentGMovie.getUrl());
+        holder.txtFooter.setText(currentGMovie.getRelease_date());
     }
 
     // Return the size of your dataset (invoked by the layout manager)

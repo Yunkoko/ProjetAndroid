@@ -51,9 +51,6 @@ public class Main2Activity extends AppCompatActivity {
         TextView vDesc = findViewById(R.id.desc);
         vDesc.setText(movie.getDescription());
 
-        //TextView vYear = findViewById(R.id.year);
-        //vYear.setText(movie.getRelease_date());
-
         TextView vDir = findViewById(R.id.dir);
         vDir.setText(movie.getDirector());
 
