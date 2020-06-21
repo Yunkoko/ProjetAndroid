@@ -1,6 +1,7 @@
 package com.firstest.projetandroid;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +23,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     private List<GMovies> values;
     private static final String TAG = "RecyclerViewAdapter";
     private ArrayList<String> mImage;
-    private Context mcontext;
+    private Context mContext;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -51,10 +52,10 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public ListAdapter(List<GMovies> myDataset, ArrayList<String> mImage, Context mcontext) {
+    public ListAdapter(List<GMovies> myDataset, ArrayList<String> mImage, Context mContext) {
         values = myDataset;
         this.mImage = mImage;
-        this.mcontext = mcontext;
+        this.mContext = mContext;
     }
 
     // Create new views (invoked by the layout manager)
@@ -76,7 +77,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
 
-        Glide.with(mcontext)
+        Glide.with(mContext)
                 .asBitmap()
                 .load(mImage.get(position))
                 .into(holder.image);
@@ -90,6 +91,14 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                 Log.d(TAG, "onClick");
             }
         });
+        Intent intent = new Intent(mContext, Main2Activity.class);
+        intent.putExtra("image_URL", mImage.get(position));
+        intent.putExtra("title", currentGMovie.getTitle());
+        intent.putExtra("desc", currentGMovie.getDescription());
+        intent.putExtra("year", currentGMovie.getRelease_date());
+        intent.putExtra("dir", currentGMovie.getDirector());
+        intent.putExtra("prod", currentGMovie.getProducer());
+        mContext.startActivity(intent);
     }
 
     // Return the size of your dataset (invoked by the layout manager)
