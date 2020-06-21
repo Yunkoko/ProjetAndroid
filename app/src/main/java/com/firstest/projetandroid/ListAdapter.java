@@ -1,32 +1,42 @@
 package com.firstest.projetandroid;
 
+import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     private List<GMovies> values;
+    private static final String TAG = "RecyclerViewAdapter";
+    private ArrayList<String> mImage;
+    private Context mcontext;
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
     static class ViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
+
         TextView txtHeader;
         TextView txtFooter;
         View layout;
+        ImageView image;
 
         ViewHolder(View v) {
             super(v);
             layout = v;
-            txtHeader = (TextView) v.findViewById(R.id.firstLine);
-            txtFooter = (TextView) v.findViewById(R.id.secondLine);
+            txtHeader =  v.findViewById(R.id.firstLine);
+            txtFooter =  v.findViewById(R.id.secondLine);
+            image = v.findViewById(R.id.icon);
         }
     }
 
@@ -41,8 +51,10 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    ListAdapter(List<GMovies> myDataset) {
+    public ListAdapter(List<GMovies> myDataset, ArrayList<String> mImage, Context mcontext) {
         values = myDataset;
+        this.mImage = mImage;
+        this.mcontext = mcontext;
     }
 
     // Create new views (invoked by the layout manager)
@@ -63,11 +75,21 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
+
+        Glide.with(mcontext)
+                .asBitmap()
+                .load(mImage.get(position))
+                .into(holder.image);
+
         final GMovies currentGMovie = values.get(position);
         holder.txtHeader.setText(currentGMovie.getTitle());
         holder.txtFooter.setText(currentGMovie.getUrl());
+        holder.layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick");
+            }
+        });
     }
 
     // Return the size of your dataset (invoked by the layout manager)

@@ -29,12 +29,36 @@ import static com.firstest.projetandroid.GMovieApi.*;
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
+    private ArrayList<String> imagesURL = new ArrayList<String>();
     private ListAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private static final String BASE_URL = "https://ghibliapi.herokuapp.com/";
     private SharedPreferences sharedPreferences;
     private Gson gson;
 
+    private void initImage()
+    {
+        imagesURL.add("https://upload.wikimedia.org/wikipedia/en/thumb/f/f5/Castle_in_the_Sky_%281986%29.png/220px-Castle_in_the_Sky_%281986%29.png");
+        imagesURL.add("https://i.redd.it/z2q1b08skk051.jpg");
+        imagesURL.add("https://preview.redd.it/ait7s6zdqxu41.jpg?width=716&format=pjpg&auto=webp&s=cd77b4bd682d7c4d5f3160b0d79d5651245415f2");
+        imagesURL.add("https://upload.wikimedia.org/wikipedia/en/0/07/Kiki%27s_Delivery_Service_%28Movie%29.jpg");
+        imagesURL.add("https://i.imgur.com/jO3wqTs.jpg");
+        imagesURL.add("https://i.redd.it/alrz6zf9ezb41.jpg");
+        imagesURL.add("https://upload.wikimedia.org/wikipedia/en/thumb/6/68/Pompokoposter.jpg/220px-Pompokoposter.jpg");
+        imagesURL.add("https://preview.redd.it/umxjkiyxv4y41.jpg?width=716&format=pjpg&auto=webp&s=09f81cf8c7e73b955f4fd5ff4ccbdc61a97150ff");
+        imagesURL.add("https://upload.wikimedia.org/wikipedia/en/thumb/8/8c/Princess_Mononoke_Japanese_poster.png/220px-Princess_Mononoke_Japanese_poster.png");
+        imagesURL.add("https://upload.wikimedia.org/wikipedia/en/thumb/4/4b/My_Neighbors_the_Yamadas_%281999%29.jpg/220px-My_Neighbors_the_Yamadas_%281999%29.jpg");
+        imagesURL.add("https://upload.wikimedia.org/wikipedia/en/thumb/d/db/Spirited_Away_Japanese_poster.png/220px-Spirited_Away_Japanese_poster.png");
+        imagesURL.add("https://upload.wikimedia.org/wikipedia/en/thumb/8/8e/Cat_Returns.jpg/220px-Cat_Returns.jpg");
+        imagesURL.add("https://upload.wikimedia.org/wikipedia/en/a/a0/Howls-moving-castleposter.jpg");
+        imagesURL.add("https://upload.wikimedia.org/wikipedia/en/thumb/e/e5/Gedo6sn.jpg/220px-Gedo6sn.jpg");
+        imagesURL.add("https://upload.wikimedia.org/wikipedia/en/thumb/9/9d/Ponyo_%282008%29.png/220px-Ponyo_%282008%29.png");
+        imagesURL.add("https://upload.wikimedia.org/wikipedia/en/thumb/e/e7/Karigurashi_no_Arrietty_poster.png/220px-Karigurashi_no_Arrietty_poster.png");
+        imagesURL.add("https://upload.wikimedia.org/wikipedia/en/thumb/c/c9/From_Up_on_Poppy_Hill.png/220px-From_Up_on_Poppy_Hill.png");
+        imagesURL.add("https://upload.wikimedia.org/wikipedia/en/a/a3/Kaze_Tachinu_poster.jpg");
+        imagesURL.add("https://upload.wikimedia.org/wikipedia/en/thumb/6/68/The_Tale_of_the_Princess_Kaguya_%28poster%29.jpg/220px-The_Tale_of_the_Princess_Kaguya_%28poster%29.jpg");
+        imagesURL.add("https://upload.wikimedia.org/wikipedia/en/thumb/a/a7/When_Marnie_Was_There.png/220px-When_Marnie_Was_There.png");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,14 +91,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showList(List<GMovies> GMoviesList) {
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
         // use a linear layout manager
         layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        // define an adapter
-        mAdapter = new ListAdapter(GMoviesList);
+        initImage();
+        mAdapter = new ListAdapter(GMoviesList, imagesURL, getApplicationContext());
         recyclerView.setAdapter(mAdapter);
     }
 
