@@ -1,9 +1,11 @@
 package com.firstest.projetandroid;
 
+import androidx.annotation.LongDef;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.media.Image;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,27 +21,26 @@ public class Main2Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
+        Log.d(TAG, "oncreated started");
+
+        getIncomingIntent();
     }
 
     private void getIncomingIntent()
     {
-        if(getIntent().hasExtra("image_URL") && getIntent().hasExtra("title") && getIntent().hasExtra("desc") && getIntent().hasExtra("year") && getIntent().hasExtra("dir") && getIntent().hasExtra("prod"))
+        if(getIntent().hasExtra("image_URL") && getIntent().hasExtra("list"))
         {
             String imageURL = getIntent().getStringExtra("image_URL");
-            String title = getIntent().getStringExtra("title");
-            String desc = getIntent().getStringExtra("desc");
-            int year = getIntent().getIntExtra("year", 0);
-            String dir = getIntent().getStringExtra("dir");
-            String prod = getIntent().getStringExtra("prod");
-
-            setInfo(imageURL, title, desc, year, dir, prod);
+            GMovies movie =  getIntent().getParcelableExtra("list");
+            Log.d(TAG, "Oncreate : " + movie.getTitle());
+            setInfo(imageURL, movie);
         }
     }
 
-    private void setInfo(String imageURL, String title, String desc, int year, String dir, String prod)
+    private void setInfo(String imageURL, GMovies movie)
     {
         TextView vTitle = findViewById(R.id.title);
-        vTitle.setText(title);
+        vTitle.setText(movie.getTitle());
 
         ImageView image = findViewById(R.id.icon2);
         Glide.with(this)
@@ -47,16 +48,16 @@ public class Main2Activity extends AppCompatActivity {
                 .load(imageURL)
                 .into(image);
 
-        EditText vDesc = findViewById(R.id.desc);
-        vDesc.setText(desc);
+        TextView vDesc = findViewById(R.id.desc);
+        vDesc.setText(movie.getDescription());
 
-        TextView vYear = findViewById(R.id.year);
-        vYear.setText(year);
+        //TextView vYear = findViewById(R.id.year);
+        //vYear.setText(movie.getRelease_date());
 
         TextView vDir = findViewById(R.id.dir);
-        vDir.setText(dir);
+        vDir.setText(movie.getDirector());
 
         TextView vProd = findViewById(R.id.prod);
-        vProd.setText(prod);
+        vProd.setText(movie.getProducer());
     }
 }

@@ -21,23 +21,40 @@ import java.util.List;
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     private List<GMovies> values;
+    private OnMovieListener mOnMovieListener;
     private static final String TAG = "RecyclerViewAdapter";
     private ArrayList<String> mImage;
     private Context mContext;
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    public ListAdapter(List<GMovies> myDataset, ArrayList<String> mImage, Context mContext, OnMovieListener onMovieListener) {
+        values = myDataset;
+        this.mImage = mImage;
+        this.mContext = mContext;
+        this.mOnMovieListener = onMovieListener;
+    }
+
+    static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView txtHeader;
         TextView txtFooter;
+        OnMovieListener onMovieListener;
         View layout;
         ImageView image;
 
-        ViewHolder(View v) {
+        public ViewHolder(@NonNull View v, OnMovieListener onMovieListener) {
             super(v);
             layout = v;
             txtHeader =  v.findViewById(R.id.firstLine);
             txtFooter =  v.findViewById(R.id.secondLine);
             image = v.findViewById(R.id.icon);
+            this.onMovieListener = onMovieListener;
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            onMovieListener.onMovieClick(getAdapterPosition());
         }
     }
 
@@ -51,25 +68,15 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         notifyItemRemoved(position);
     }
 
-    // Provide a suitable constructor (depends on the kind of dataset)
-    public ListAdapter(List<GMovies> myDataset, ArrayList<String> mImage, Context mContext) {
-        values = myDataset;
-        this.mImage = mImage;
-        this.mContext = mContext;
-    }
-
     // Create new views (invoked by the layout manager)
     @NonNull
     @Override
-    public ListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                   int viewType) {
+    public ListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
-        LayoutInflater inflater = LayoutInflater.from(
-                parent.getContext());
-        View v =
-                inflater.inflate(R.layout.row_layout, parent, false);
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View v = inflater.inflate(R.layout.row_layout, parent, false);
         // set the view's size, margins, paddings and layout parameters
-        ViewHolder vh = new ViewHolder(v);
+        ViewHolder vh = new ViewHolder(v, mOnMovieListener);
         return vh;
     }
 
@@ -85,20 +92,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         final GMovies currentGMovie = values.get(position);
         holder.txtHeader.setText(currentGMovie.getTitle());
         holder.txtFooter.setText(currentGMovie.getUrl());
-        holder.layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick");
-            }
-        });
-        Intent intent = new Intent(mContext, Main2Activity.class);
-        intent.putExtra("image_URL", mImage.get(position));
-        intent.putExtra("title", currentGMovie.getTitle());
-        intent.putExtra("desc", currentGMovie.getDescription());
-        intent.putExtra("year", currentGMovie.getRelease_date());
-        intent.putExtra("dir", currentGMovie.getDirector());
-        intent.putExtra("prod", currentGMovie.getProducer());
-        mContext.startActivity(intent);
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -107,4 +100,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         return values.size();
     }
 
+    public interface OnMovieListener
+    {
+        void onMovieClick(int position);
+    }
 }

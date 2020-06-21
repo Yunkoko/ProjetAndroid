@@ -6,8 +6,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -26,10 +29,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.firstest.projetandroid.GMovieApi.*;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ListAdapter.OnMovieListener {
 
+    private static final String TAG = "MainActivity";
     private RecyclerView recyclerView;
     private ArrayList<String> imagesURL = new ArrayList<String>();
+    private ArrayList<GMovies> GMoviesList2 = new ArrayList<GMovies>();
     private ListAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private static final String BASE_URL = "https://ghibliapi.herokuapp.com/";
@@ -77,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             makeApiCall();
         }
+        GMoviesList2 = getArrayDataFromCache();
     }
 
     private List<GMovies> getDataFromCache() {
@@ -90,6 +96,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private ArrayList<GMovies> getArrayDataFromCache() {
+        String jsonGmovies = sharedPreferences.getString("jsonGMoviesList", null);
+
+        if(jsonGmovies == null){
+            return null;
+        } else {
+            Type listType = new TypeToken<ArrayList<GMovies>>(){}.getType();
+            return gson.fromJson(jsonGmovies, listType);
+        }
+    }
+
     private void showList(List<GMovies> GMoviesList) {
         recyclerView = findViewById(R.id.recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -98,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         initImage();
-        mAdapter = new ListAdapter(GMoviesList, imagesURL, getApplicationContext());
+        mAdapter = new ListAdapter(GMoviesList, imagesURL, getApplicationContext(), this);
         recyclerView.setAdapter(mAdapter);
     }
 
@@ -144,5 +161,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void showError() {
         Toast.makeText(getApplicationContext(), "API Error", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onMovieClick(int position) {
+        Log.d(TAG, "onMovieClick: clicked");
+        Intent intent = new Intent(this, Main2Activity.class);
+        intent.putExtra("image_URL", imagesURL.get(position));
+        intent.putExtra( "list", GMoviesList2.get(position));
+        startActivity(intent);
     }
 }
