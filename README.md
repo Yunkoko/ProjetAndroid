@@ -6,10 +6,11 @@ L'application affiche une liste des films Ghibli et permet d'avoir une descripti
 Consignes repectées:
 - Affichage d'une liste avec un RecyclerView
 - Affichage d'une description précise de chaque élément
-- Utilisation d'une API rest
+- Utilisation d'une API rest : https://ghibliapi.herokuapp.com/
 - Stockage de données en cache
 - Gitflow
 - Principes DRY,KISS,SOLID
+- Ajout d'images non présent dans l'API
 
 Fonctionnalités:
 
